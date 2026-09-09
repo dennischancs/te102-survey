@@ -404,7 +404,7 @@ let currentLang = 'zh';
 const STORAGE_KEY = 'te102_survey_draft';
 const LANG_KEY = 'te102_survey_lang';
 const CONTACT_EMAIL = 'support-amazon@retekess.com';
-const WORKER_URL = 'https://te102-dingtalk.dennischancs.workers.dev'; // 部署 Cloudflare Worker 后替换为实际 URL
+const WORKER_URL = 'https://te102-survey.vercel.app/api/dingtalk'; // Vercel 部署后替换为实际 URL
 
 // ============ HELPERS ============
 function t(key) {
@@ -1032,35 +1032,32 @@ function getAnswerCSV(q) {
 async function sendDingTalk() {
   try {
     const data = getExportData();
+    // 构建与 exportCSV 一致的 CSV 数据
+    const headers = ['受试者编号', '测试日期', '测试员', '联系电话', '备注'];
+    const row = [data.meta.subject, data.meta.date, data.meta.tester, data.meta.phone, data.meta.note];
+    QUESTIONS.sections.forEach(s => s.questions.forEach(q => {
+      headers.push(`${q.id}_${q.category}`);
+      row.push(getAnswerCSV(q));
+    }));
     const cats = {};
     QUESTIONS.sections.forEach(s => s.questions.forEach(q => {
       if (isQuestionHidden(q.id)) return;
-      const cat = currentLang === 'zh' ? q.category : q.categoryEn;
-      if (!cats[cat]) cats[cat] = { sum: 0, count: 0 };
+      if (!cats[q.category]) cats[q.category] = { sum: 0, count: 0 };
       const val = answers[q.id];
-      if (typeof val === 'number' && val >= 1 && val <= 5) { cats[cat].sum += val; cats[cat].count++; }
+      if (typeof val === 'number' && val >= 1 && val <= 5) { cats[q.category].sum += val; cats[q.category].count++; }
     }));
-
-    let md = `## TE102 内测问卷结果\n\n`;
-    md += `**受试者编号**：${data.meta.subject || '未填'}\n\n`;
-    md += `**测试日期**：${data.meta.date}\n\n`;
-    md += `**测试员**：${data.meta.tester || '未填'}\n\n`;
-    md += `**语言**：${data.meta.language}\n\n---\n\n### 各维度得分\n\n`;
-    let lowItems = [];
     for (const [cat, d] of Object.entries(cats)) {
-      if (d.count > 0) {
-        const avg = (d.sum / d.count).toFixed(2);
-        const flag = parseFloat(avg) < 3.5 ? ' ⚠️' : '';
-        md += `- ${cat}：${avg}（${d.count}题）${flag}\n`;
-        if (parseFloat(avg) < 3.5) lowItems.push(cat);
-      }
+      headers.push(`均分_${cat}`);
+      row.push(d.count > 0 ? (d.sum / d.count).toFixed(2) : '');
     }
-    const nps = answers['Q37'];
-    md += `\n**推荐意愿(NPS)**：${nps !== undefined ? nps + '/10' : '未答'}${nps !== undefined && nps < 6 ? ' ⚠️' : ''}\n`;
-    if (lowItems.length > 0) md += `\n### ⚠️ 低分维度\n\n${lowItems.join('、')}\n`;
-    md += `\n> 完整数据请通过邮件发送查看`;
+    headers.push('NPS');
+    row.push(answers['Q37'] !== undefined ? answers['Q37'] : '');
 
-    const payload = { msgtype: 'markdown', markdown: { title: 'TE102问卷结果', text: md } };
+    const esc = c => { const s = String(c ?? ''); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+    const csvLine = arr => arr.map(esc).join(',');
+    const csv = csvLine(headers) + '\n' + csvLine(row);
+
+    const payload = { msgtype: 'text', text: { content: csv } };
     const resp = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
