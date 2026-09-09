@@ -404,7 +404,7 @@ let currentLang = 'zh';
 const STORAGE_KEY = 'te102_survey_draft';
 const LANG_KEY = 'te102_survey_lang';
 const CONTACT_EMAIL = 'support-amazon@retekess.com';
-const WORKER_URL = 'https://te102-survey.vercel.app/api/dingtalk'; // Vercel 部署后替换为实际 URL
+const DINGTALK_PROXY = 'https://te102-survey.netlify.app/.netlify/functions/dingtalk'; // Netlify 部署后替换为实际 URL
 
 // ============ HELPERS ============
 function t(key) {
@@ -1032,7 +1032,6 @@ function getAnswerCSV(q) {
 async function sendDingTalk() {
   try {
     const data = getExportData();
-    // 构建与 exportCSV 一致的 CSV 数据
     const headers = ['受试者编号', '测试日期', '测试员', '联系电话', '备注'];
     const row = [data.meta.subject, data.meta.date, data.meta.tester, data.meta.phone, data.meta.note];
     QUESTIONS.sections.forEach(s => s.questions.forEach(q => {
@@ -1058,7 +1057,7 @@ async function sendDingTalk() {
     const csv = csvLine(headers) + '\n' + csvLine(row);
 
     const payload = { msgtype: 'text', text: { content: csv } };
-    const resp = await fetch(WORKER_URL, {
+    const resp = await fetch(DINGTALK_PROXY, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
