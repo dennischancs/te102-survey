@@ -595,6 +595,10 @@ function renderQuestion(q, num) {
         </label>`;
       });
       body += `</div>`;
+      if (qField(q, 'textLabel')) {
+        body += `<span class="text-label">${qField(q, 'textLabel')}</span>
+          <textarea class="text-area" data-q="${qid}_text" placeholder="${qField(q, 'textPlaceholder')}" rows="3"></textarea>`;
+      }
       break;
 
     case 'yesno':
@@ -877,7 +881,9 @@ function getAnswerDisplay(q) {
       if (answers[qid + '_text']) rt += `（${answers[qid + '_text']}）`;
       return rt;
     case 'checkbox':
-      return (answers[qid] && answers[qid].length > 0) ? answers[qid].join('、') : t('unanswered');
+      let cb = (answers[qid] && answers[qid].length > 0) ? answers[qid].join('、') : t('unanswered');
+      if (answers[qid + '_text']) cb += `（${answers[qid + '_text']}）`;
+      return cb;
     case 'rating1_5':
     case 'rating0_10':
     case 'family_rating':
@@ -985,7 +991,7 @@ function getAnswerCSV(q) {
     case 'radio_text':
       return (answers[qid] || '') + (answers[qid + '_text'] ? '|' + answers[qid + '_text'] : '');
     case 'checkbox':
-      return answers[qid] ? answers[qid].join('|') : '';
+      return (answers[qid] ? answers[qid].join('|') : '') + (answers[qid + '_text'] ? '|' + answers[qid + '_text'] : '');
     case 'rating1_5': case 'rating0_10': case 'family_rating':
       return answers[qid] !== undefined ? answers[qid] : '';
     case 'rating_text':
