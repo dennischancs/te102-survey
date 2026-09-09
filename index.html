@@ -226,6 +226,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","
       <div class="result-summary" id="resultSummary"></div>
     </div>
 
+    <div class="card" style="border:2px solid var(--primary);background:var(--primary-light)">
+      <div class="section-title"><span class="num">✉️</span> <span id="emailGuideTitle">请将结果发回给我们</span></div>
+      <p style="font-size:13px;color:var(--text);margin:8px 0" id="emailGuideDesc">点击下方按钮，通过邮件将问卷结果发送给我们。</p>
+      <div style="font-size:14px;font-weight:bold;color:var(--primary);margin:8px 0" id="emailGuideAddr">testtest@test.com</div>
+      <button class="btn btn-primary btn-block" onclick="sendEmail()" id="btnSendEmail">📧 邮件发送结果</button>
+    </div>
+
     <div class="card">
       <div class="section-title"><span class="num">📋</span> <span id="reviewTitle">答题详情</span></div>
       <div id="reviewList" style="margin-top:8px;max-height:400px;overflow-y:auto"></div>
@@ -301,6 +308,9 @@ const I18N = {
     expCsv: 'CSV 表格（Excel分析）',
     expPdf: '打印 / 存为 PDF',
     expEmail: '邮件发送',
+    emailGuideTitle: '请将结果发回给我们',
+    emailGuideDesc: '点击下方按钮，通过邮件将问卷结果发送给我们。',
+    btnSendEmail: '📧 邮件发送结果',
     avgScoreTitle: '各维度平均得分（1-5分制）',
     npsLabel: '推荐意愿 (NPS 0-10)',
     unanswered: '未作答',
@@ -356,6 +366,9 @@ const I18N = {
     expCsv: 'CSV (for Excel)',
     expPdf: 'Print / Save as PDF',
     expEmail: 'Send via Email',
+    emailGuideTitle: 'Please Send Results Back to Us',
+    emailGuideDesc: 'Click the button below to send your survey results to us via email.',
+    btnSendEmail: '📧 Email Results',
     avgScoreTitle: 'Average Score by Dimension (1-5 scale)',
     npsLabel: 'Recommendation (NPS 0-10)',
     unanswered: 'Not answered',
@@ -390,6 +403,7 @@ let answers = {};
 let currentLang = 'zh';
 const STORAGE_KEY = 'te102_survey_draft';
 const LANG_KEY = 'te102_survey_lang';
+const CONTACT_EMAIL = 'testtest@test.com';
 
 // ============ HELPERS ============
 function t(key) {
@@ -443,7 +457,8 @@ function applyStaticTexts() {
     btnBack: 'textContent', btnReset: 'textContent',
     resultDoneTitle: 'textContent', reviewTitle: 'textContent',
     exportTitle: 'textContent', exportDesc: 'textContent',
-    expJson: 'textContent', expCsv: 'textContent', expPdf: 'textContent', expEmail: 'textContent'
+    expJson: 'textContent', expCsv: 'textContent', expPdf: 'textContent', expEmail: 'textContent',
+    emailGuideTitle: 'textContent', emailGuideDesc: 'textContent', btnSendEmail: 'textContent'
   };
   for (const [id, prop] of Object.entries(map)) {
     const el = document.getElementById(id);
@@ -454,6 +469,9 @@ function applyStaticTexts() {
   document.getElementById('info-tester').placeholder = t('phTester');
   document.getElementById('info-phone').placeholder = t('phPhone');
   document.getElementById('info-note').placeholder = t('phNote');
+  // Contact email
+  const emailAddrEl = document.getElementById('emailGuideAddr');
+  if (emailAddrEl) emailAddrEl.textContent = CONTACT_EMAIL;
   // Lang buttons
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === currentLang);
@@ -1036,7 +1054,7 @@ function sendEmail() {
   }));
   body += `\n\n${t('emailFooter')}`;
 
-  const mailto = `mailto:?subject=${subject}&body=${encodeURIComponent(body)}`;
+  const mailto = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${encodeURIComponent(body)}`;
   window.location.href = mailto;
   showToast(t('toastEmail'));
 }
