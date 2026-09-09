@@ -112,7 +112,7 @@
           "id": "Q08",
           "type": "rating1_5",
           "text": "试戴后，您能接受\"耳背挂机+入耳塞\"这种外形吗？",
-          "textEn": "After trying it on, can you accept the \"BTE + ear tip\" appearance?",
+          "textEn": "After trying it on, can you accept the \"RIC + ear tip\" appearance?",
           "category": "人群定位",
           "categoryEn": "User Profiling",
           "purpose": "验证RIC形态的外观接受度（外观是退货因素之一）。",
