@@ -1064,10 +1064,11 @@ async function sendDingTalk() {
       body: JSON.stringify(payload)
     });
     const result = await resp.json();
-    if (result.errcode === 0) {
-      console.log('DingTalk push sent:', result.errmsg);
+    const dt = result.dingtalk || result;
+    if (dt.errcode === 0) {
+      console.log('DingTalk push sent:', dt.errmsg);
     } else {
-      console.warn('DingTalk push error:', result.errmsg);
+      console.warn('DingTalk push error:', dt.errmsg || JSON.stringify(result));
     }
   } catch (e) {
     console.warn('DingTalk push failed:', e);
