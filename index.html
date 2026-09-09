@@ -404,6 +404,7 @@ let currentLang = 'zh';
 const STORAGE_KEY = 'te102_survey_draft';
 const LANG_KEY = 'te102_survey_lang';
 const CONTACT_EMAIL = 'support-amazon@retekess.com';
+const WORKER_URL = 'https://te102-dingtalk.dennischancs.workers.dev'; // 部署 Cloudflare Worker 后替换为实际 URL
 
 // ============ HELPERS ============
 function t(key) {
@@ -826,6 +827,7 @@ function showResult() {
   window.scrollTo(0, 0);
   renderResultSummary();
   renderReview();
+  sendDingTalk();
 }
 
 function backToEdit() {
@@ -1023,6 +1025,55 @@ function getAnswerCSV(q) {
       return answers[qid] || '';
     default:
       return '';
+  }
+}
+
+// ============ DINGTALK PUSH ============
+async function sendDingTalk() {
+  try {
+    const data = getExportData();
+    const cats = {};
+    QUESTIONS.sections.forEach(s => s.questions.forEach(q => {
+      if (isQuestionHidden(q.id)) return;
+      const cat = currentLang === 'zh' ? q.category : q.categoryEn;
+      if (!cats[cat]) cats[cat] = { sum: 0, count: 0 };
+      const val = answers[q.id];
+      if (typeof val === 'number' && val >= 1 && val <= 5) { cats[cat].sum += val; cats[cat].count++; }
+    }));
+
+    let md = `## TE102 内测问卷结果\n\n`;
+    md += `**受试者编号**：${data.meta.subject || '未填'}\n\n`;
+    md += `**测试日期**：${data.meta.date}\n\n`;
+    md += `**测试员**：${data.meta.tester || '未填'}\n\n`;
+    md += `**语言**：${data.meta.language}\n\n---\n\n### 各维度得分\n\n`;
+    let lowItems = [];
+    for (const [cat, d] of Object.entries(cats)) {
+      if (d.count > 0) {
+        const avg = (d.sum / d.count).toFixed(2);
+        const flag = parseFloat(avg) < 3.5 ? ' ⚠️' : '';
+        md += `- ${cat}：${avg}（${d.count}题）${flag}\n`;
+        if (parseFloat(avg) < 3.5) lowItems.push(cat);
+      }
+    }
+    const nps = answers['Q37'];
+    md += `\n**推荐意愿(NPS)**：${nps !== undefined ? nps + '/10' : '未答'}${nps !== undefined && nps < 6 ? ' ⚠️' : ''}\n`;
+    if (lowItems.length > 0) md += `\n### ⚠️ 低分维度\n\n${lowItems.join('、')}\n`;
+    md += `\n> 完整数据请通过邮件发送查看`;
+
+    const payload = { msgtype: 'markdown', markdown: { title: 'TE102问卷结果', text: md } };
+    const resp = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const result = await resp.json();
+    if (result.errcode === 0) {
+      console.log('DingTalk push sent:', result.errmsg);
+    } else {
+      console.warn('DingTalk push error:', result.errmsg);
+    }
+  } catch (e) {
+    console.warn('DingTalk push failed:', e);
   }
 }
 
