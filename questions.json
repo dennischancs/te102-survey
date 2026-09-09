@@ -1,0 +1,509 @@
+{
+  "meta": {
+    "title": "TE102 助听器（含电视伴侣 + APP）用户内测问卷",
+    "titleEn": "TE102 Hearing Aid (with TV Streamer + APP) User Beta Survey",
+    "version": "20260724",
+    "description": "面向真实用户的内测回收。①定位目标人群/分群；②验证需求是否被满足；③把反馈直接映射到迭代方向。",
+    "descriptionEn": "Beta testing feedback from real users. ①Identify target user segments; ②Validate whether needs are met; ③Map feedback directly to iteration priorities.",
+    "scoringGuide": {
+      "rating1_5": "1=非常差/完全不符合，2=较差，3=一般/还行，4=较好，5=非常好/完全符合",
+      "rating1_5En": "1=Very Poor/Completely Disagree, 2=Poor, 3=Average/OK, 4=Good, 5=Excellent/Completely Agree",
+      "rating0_10": "0=完全不会推荐，10=一定会推荐",
+      "rating0_10En": "0=Not at all likely, 10=Extremely likely",
+      "distance": "分别就\"1米内\"和\"3米外\"各打一次分",
+      "distanceEn": "Rate separately for \"within 1 meter\" and \"beyond 3 meters\""
+    }
+  },
+  "sections": [
+    {
+      "id": "demographics",
+      "title": "一、人群定位（你是谁 / 你的痛点）",
+      "titleEn": "1. User Profiling (Who You Are / Your Pain Points)",
+      "description": "先做这9题筛人，再进行真实佩戴体验后答其余题目。",
+      "descriptionEn": "Complete these 9 screening questions first, then answer the rest after real wearing experience.",
+      "questions": [
+        {
+          "id": "Q01",
+          "type": "radio",
+          "text": "您的年龄区间是？",
+          "textEn": "What is your age range?",
+          "options": ["50岁以下", "50-60", "60-70", "70岁以上"],
+          "optionsEn": ["Under 50", "50-60", "60-70", "Over 70"],
+          "category": "人群定位",
+          "categoryEn": "User Profiling",
+          "purpose": "确认主力年龄段，验证RIC耳背形态与对应年龄层的操作、外观接受度是否匹配。",
+          "purposeEn": "Confirm the primary age group and verify whether the RIC BTE form factor matches the operation and appearance acceptance of that age group."
+        },
+        {
+          "id": "Q02",
+          "type": "radio",
+          "text": "您觉得自己听力下降的程度？",
+          "textEn": "How would you rate your hearing loss?",
+          "options": ["轻度：小声听不清", "中度：常要人重复", "重度：几乎听不清", "不确定"],
+          "optionsEn": ["Mild: difficulty with soft sounds", "Moderate: often ask people to repeat", "Severe: can barely hear", "Not sure"],
+          "category": "人群定位",
+          "categoryEn": "User Profiling",
+          "purpose": "验证目标为轻中度OTC人群，并前置筛掉重度（需转诊医疗）用户，降低错误购买。",
+          "purposeEn": "Validate target as mild-to-moderate OTC users; pre-screen severe loss users (who need medical referral) to reduce incorrect purchases."
+        },
+        {
+          "id": "Q03",
+          "type": "checkbox",
+          "text": "您最主要的听觉困难场景是哪些？（可多选）",
+          "textEn": "What are your main hearing difficulty situations? (Select all that apply)",
+          "options": ["看电视", "和家人聊天", "户外马路", "餐厅多人", "打电话", "开会"],
+          "optionsEn": ["Watching TV", "Chatting with family", "Outdoor/street", "Restaurant/crowd", "Phone calls", "Meetings"],
+          "category": "人群定位",
+          "categoryEn": "User Profiling",
+          "purpose": "定位首要痛点场景，判断产品应主推居家/电视还是户外/会议，并据此分群。",
+          "purposeEn": "Identify primary pain point scenarios; determine whether the product should focus on home/TV or outdoor/meetings, and segment users accordingly."
+        },
+        {
+          "id": "Q04",
+          "type": "radio",
+          "text": "您每天看电视或视频大约多久？",
+          "textEn": "About how long do you watch TV or videos each day?",
+          "options": ["不到半小时", "0.5-1小时", "1-3小时", "3小时以上"],
+          "optionsEn": ["Less than 30 min", "0.5-1 hour", "1-3 hours", "More than 3 hours"],
+          "category": "人群定位",
+          "categoryEn": "User Profiling",
+          "purpose": "验证\"电视痛点\"是否为高频刚需。",
+          "purposeEn": "Validate whether the \"TV pain point\" is a high-frequency essential need."
+        },
+        {
+          "id": "Q05",
+          "type": "yesno",
+          "text": "家人是否抱怨过您看电视音量开得太大？",
+          "textEn": "Has your family ever complained that you turn the TV volume too high?",
+          "category": "人群定位",
+          "categoryEn": "User Profiling",
+          "purpose": "验证\"家庭音量冲突\"这一电视伴侣首要价值点是否成立。",
+          "purposeEn": "Validate whether the \"household volume conflict\" — the primary value proposition of the TV streamer — holds true."
+        },
+        {
+          "id": "Q06",
+          "type": "radio_text",
+          "text": "您是否戴过 / 买过助听器？结果如何？",
+          "textEn": "Have you ever worn / purchased a hearing aid? How did it go?",
+          "options": ["没戴过", "戴过在用", "买过但退了"],
+          "optionsEn": ["Never worn", "Worn, currently using", "Bought but returned"],
+          "textLabel": "如选\"买过但退了\"，请填写退货原因：",
+          "textLabelEn": "If you selected \"Bought but returned\", please specify the reason:",
+          "textPlaceholder": "请描述退货原因（如啸叫、操作复杂等）",
+          "textPlaceholderEn": "Please describe the return reason (e.g., whistling, complicated operation)",
+          "category": "人群定位",
+          "categoryEn": "User Profiling",
+          "purpose": "识别退货高风险用户（尤其因啸叫、操作复杂退过货的），并获取竞品对比线索。",
+          "purposeEn": "Identify high return-risk users (especially those who returned due to whistling or complex operation), and gather competitive comparison insights."
+        },
+        {
+          "id": "Q07",
+          "type": "radio",
+          "text": "您目前主要和谁同住？",
+          "textEn": "Who do you currently live with?",
+          "options": ["独居", "与配偶", "与子女同住", "其他"],
+          "optionsEn": ["Living alone", "With spouse", "With children", "Other"],
+          "category": "人群定位",
+          "categoryEn": "User Profiling",
+          "purpose": "判断是否有家属可协助首次安装/调试，识别\"服务依赖型\"用户。",
+          "purposeEn": "Determine whether family members can assist with initial setup/adjustment; identify \"service-dependent\" users."
+        },
+        {
+          "id": "Q08",
+          "type": "rating1_5",
+          "text": "试戴后，您能接受\"耳背挂机+入耳塞\"这种外形吗？",
+          "textEn": "After trying it on, can you accept the \"BTE + ear tip\" appearance?",
+          "category": "人群定位",
+          "categoryEn": "User Profiling",
+          "purpose": "验证RIC形态的外观接受度（外观是退货因素之一）。",
+          "purposeEn": "Validate appearance acceptance of the RIC form factor (appearance is one of the return factors)."
+        },
+        {
+          "id": "Q09",
+          "type": "yesno",
+          "text": "您是否理解：本产品主要改善\"看电视和日常对话\"，不承诺适用所有嘈杂环境？",
+          "textEn": "Do you understand that this product mainly improves \"watching TV and daily conversation\" and does not claim to work in all noisy environments?",
+          "category": "人群定位",
+          "categoryEn": "User Profiling",
+          "purpose": "降低期望错配导致的退货，确保用户与产品定位一致。",
+          "purposeEn": "Reduce returns caused by expectation mismatch; ensure users align with the product positioning."
+        }
+      ]
+    },
+    {
+      "id": "comfort",
+      "title": "二、佩戴与舒适",
+      "titleEn": "2. Wearing & Comfort",
+      "questions": [
+        {
+          "id": "Q10",
+          "type": "rating_text",
+          "text": "戴上后耳塞贴合吗？松紧是否合适？",
+          "textEn": "After putting it on, does the ear tip fit well? Is the tightness appropriate?",
+          "textLabel": "如偏松/偏紧请描述：",
+          "textLabelEn": "If too loose/tight, please describe:",
+          "textPlaceholder": "请描述佩戴感受",
+          "textPlaceholderEn": "Please describe the wearing experience",
+          "category": "佩戴舒适",
+          "categoryEn": "Wearing Comfort",
+          "purpose": "验证耳塞规格覆盖度。",
+          "purposeEn": "Validate ear tip size coverage."
+        },
+        {
+          "id": "Q11",
+          "type": "rating1_5",
+          "text": "戴久了（如半小时以上），耳朵舒适吗？（不痛、不胀、不痒）",
+          "textEn": "After wearing for a while (e.g., over 30 minutes), how comfortable are your ears? (no pain, pressure, or itching)",
+          "category": "佩戴舒适",
+          "categoryEn": "Wearing Comfort",
+          "purpose": "验证长时间佩戴舒适性（声学报告要求>8h无疲劳/压痛）。",
+          "purposeEn": "Validate long-term wearing comfort (acoustic report requires >8h without fatigue/pain)."
+        },
+        {
+          "id": "Q12",
+          "type": "rating1_5",
+          "text": "您自己说话时，声音听起来自然吗？（不闷、无回声、不像隔着东西/水）",
+          "textEn": "When you speak, does your voice sound natural? (not muffled, no echo, not like through something/water)",
+          "category": "佩戴舒适",
+          "categoryEn": "Wearing Comfort",
+          "purpose": "验证自声堵耳(occlusion)与回声问题（有回声、听感晕）。",
+          "purposeEn": "Validate own-voice occlusion and echo issues (echo causes dizziness)."
+        },
+        {
+          "id": "Q13",
+          "type": "rating1_5",
+          "text": "戴眼镜/口罩、转头、咀嚼时，助听器佩戴稳固吗？（不移位、无啸叫）",
+          "textEn": "When wearing glasses/mask, turning head, or chewing, is the hearing aid securely in place? (no shifting, no whistling)",
+          "category": "佩戴舒适",
+          "categoryEn": "Wearing Comfort",
+          "purpose": "验证动态佩戴稳定性与啸叫安全（产品红线）。",
+          "purposeEn": "Validate dynamic wearing stability and feedback safety (product red line)."
+        },
+        {
+          "id": "Q14",
+          "type": "rating1_5",
+          "text": "戴一整天后，您觉得舒适吗？（不累、不想摘下来）",
+          "textEn": "After wearing all day, how comfortable do you feel? (not tired, don't want to take it off)",
+          "category": "佩戴舒适",
+          "categoryEn": "Wearing Comfort",
+          "purpose": "验证整体听觉疲劳（声学报告要求>8h无疲劳/压痛）。",
+          "purposeEn": "Validate overall listening fatigue (acoustic report requires >8h without fatigue/pain)."
+        }
+      ]
+    },
+    {
+      "id": "operation",
+      "title": "三、操作易用",
+      "titleEn": "3. Ease of Use",
+      "questions": [
+        {
+          "id": "Q15",
+          "type": "rating1_5",
+          "text": "开机、关机、调大/调小声音，您自己能顺手完成吗？",
+          "textEn": "Can you easily turn on/off and adjust volume by yourself?",
+          "category": "操作易用",
+          "categoryEn": "Ease of Use",
+          "purpose": "验证基础操作门槛。",
+          "purposeEn": "Validate basic operation threshold."
+        },
+        {
+          "id": "Q16",
+          "type": "rating1_5",
+          "text": "切换模式（如室内/户外/电视）方便吗？四种听感模式是否有一款适合你？",
+          "textEn": "Is it easy to switch modes (e.g., indoor/outdoor/TV)? Is one of the four listening modes suitable for you?",
+          "category": "操作易用",
+          "categoryEn": "Ease of Use",
+          "purpose": "验证模式实用性与适配度。",
+          "purposeEn": "Validate mode practicality and adaptability."
+        },
+        {
+          "id": "Q17",
+          "type": "rating_text",
+          "text": "充电和看电量方便吗？一次充电大概能用多久？",
+          "textEn": "Is charging and checking battery level convenient? About how long does one charge last?",
+          "textLabel": "请填写一次充电大约能用多久：",
+          "textLabelEn": "Please specify about how long one charge lasts:",
+          "textPlaceholder": "如：约8小时",
+          "textPlaceholderEn": "e.g., about 8 hours",
+          "category": "操作易用",
+          "categoryEn": "Ease of Use",
+          "purpose": "验证续航与电量提示可用性。",
+          "purposeEn": "Validate battery life and battery indicator usability."
+        },
+        {
+          "id": "Q18",
+          "type": "rating_text",
+          "text": "手机 App好用吗？若不好用，请在下方填写原因。",
+          "textEn": "Is the mobile App easy to use? If not, please describe the reasons below.",
+          "textLabel": "若不好用，请填写具体原因：",
+          "textLabelEn": "If not easy to use, please specify the reasons:",
+          "textPlaceholder": "如：界面复杂、连接不稳定、功能找不到等",
+          "textPlaceholderEn": "e.g., complex interface, unstable connection, hard to find features, etc.",
+          "category": "操作易用",
+          "categoryEn": "Ease of Use",
+          "purpose": "验证App易用性。",
+          "purposeEn": "Validate App usability."
+        }
+      ]
+    },
+    {
+      "id": "clarity",
+      "title": "四、声音清晰度（安静 & 室内）",
+      "titleEn": "4. Sound Clarity (Quiet & Indoor)",
+      "questions": [
+        {
+          "id": "Q19",
+          "type": "rating_distance",
+          "text": "安静房间里，1米内、3米外，与人正常说话，能听清吗？（不是背对着人）",
+          "textEn": "In a quiet room, at 1 meter and beyond 3 meters, can you hear normal conversation clearly? (Not with your back to the person)",
+          "subLabels": ["1米内", "3米外"],
+          "subLabelsEn": ["Within 1 meter", "Beyond 3 meters"],
+          "category": "声音清晰度",
+          "categoryEn": "Sound Clarity",
+          "purpose": "验证人声清晰度与距离衰减。",
+          "purposeEn": "Validate speech clarity and distance attenuation."
+        },
+        {
+          "id": "Q20",
+          "type": "rating1_5",
+          "text": "打电话时，对方声音清楚、连接稳定吗？（不断、不卡）",
+          "textEn": "During phone calls, is the other person's voice clear and the connection stable? (no dropouts, no stuttering)",
+          "category": "声音清晰度",
+          "categoryEn": "Sound Clarity",
+          "purpose": "验证电话/蓝牙通话质量与稳定性。",
+          "purposeEn": "Validate phone/Bluetooth call quality and stability."
+        },
+        {
+          "id": "Q21",
+          "type": "rating1_5",
+          "text": "听音乐时，乐器声音自然、分得开吗？",
+          "textEn": "When listening to music, do instruments sound natural and distinguishable?",
+          "category": "声音清晰度",
+          "categoryEn": "Sound Clarity",
+          "purpose": "验证音乐模式音质。",
+          "purposeEn": "Validate music mode sound quality."
+        },
+        {
+          "id": "Q22",
+          "type": "rating1_5",
+          "text": "您能大概判断声音从哪边来吗（左/右/前/后）？",
+          "textEn": "Can you roughly tell which direction sound comes from (left/right/front/back)?",
+          "category": "声音清晰度",
+          "categoryEn": "Sound Clarity",
+          "purpose": "验证空间方位感。",
+          "purposeEn": "Validate spatial directional awareness."
+        },
+        {
+          "id": "Q23",
+          "type": "rating1_5",
+          "text": "您自己/别人说话时，声音位置正常吗（不在头顶/胸腔）？",
+          "textEn": "When you/others speak, is the sound location normal (not in your head/chest)?",
+          "category": "声音清晰度",
+          "categoryEn": "Sound Clarity",
+          "purpose": "验证声像定位自然度，避免\"声音在脑子里\"的异物感。",
+          "purposeEn": "Validate natural sound localization; avoid the \"sound in your head\" foreign sensation."
+        }
+      ]
+    },
+    {
+      "id": "noise",
+      "title": "五、降噪与啸叫（关键风险）",
+      "titleEn": "5. Noise Reduction & Feedback (Key Risks)",
+      "questions": [
+        {
+          "id": "Q24",
+          "type": "rating1_5",
+          "text": "突然的响声（咳嗽、拍手、关门、电视广告）听起来舒适吗？（不刺耳、不吓人）",
+          "textEn": "Do sudden loud sounds (coughing, clapping, door slamming, TV commercials) sound comfortable? (not harsh, not startling)",
+          "category": "降噪啸叫",
+          "categoryEn": "Noise & Feedback",
+          "purpose": "验证突发声保护。",
+          "purposeEn": "Validate impulse sound protection."
+        },
+        {
+          "id": "Q25",
+          "type": "rating1_5",
+          "text": "正常佩戴时，靠近墙/书、用手捂耳，啸叫控制得好吗？（无尖叫=好）",
+          "textEn": "During normal wear, when near walls/books or covering ears with hands, how well is feedback controlled? (no whistling = good)",
+          "category": "降噪啸叫",
+          "categoryEn": "Noise & Feedback",
+          "purpose": "验证静态啸叫红线。",
+          "purposeEn": "Validate static feedback red line."
+        },
+        {
+          "id": "Q26",
+          "type": "rating1_5",
+          "text": "在马路上/有风时，人声清晰吗？（不被风声盖住、无\"呜呜\"响）",
+          "textEn": "On the street/windy conditions, is speech clear? (not drowned by wind, no 'whooshing')",
+          "category": "降噪啸叫",
+          "categoryEn": "Noise & Feedback",
+          "purpose": "验证风噪控制（户外风噪\"呜呜\"声风险）。",
+          "purposeEn": "Validate wind noise control (outdoor wind \"whooshing\" risk)."
+        },
+        {
+          "id": "Q27",
+          "type": "rating1_5",
+          "text": "在菜市场/餐厅等嘈杂地方，人声清晰吗？（不被噪音盖住）",
+          "textEn": "In noisy places like markets/restaurants, is speech clear? (not drowned by noise)",
+          "category": "降噪啸叫",
+          "categoryEn": "Noise & Feedback",
+          "purpose": "验证嘈杂环境降噪与人声突出（环境音盖过人声、易晕）。",
+          "purposeEn": "Validate noisy environment noise reduction and speech emphasis (ambient noise drowning speech causes dizziness)."
+        },
+        {
+          "id": "Q28",
+          "type": "rating1_5",
+          "text": "最小音量时，背景安静吗？（无电流声、无杂音）",
+          "textEn": "At minimum volume, is the background quiet? (no electrical hum, no noise)",
+          "category": "降噪啸叫",
+          "categoryEn": "Noise & Feedback",
+          "purpose": "验证底噪水平（最小音量有持续轻微电流杂音）。",
+          "purposeEn": "Validate noise floor level (persistent slight electrical hum at minimum volume)."
+        }
+      ]
+    },
+    {
+      "id": "scenario",
+      "title": "六、场景验证（户外 / 嘈杂 / 电视 / 蓝牙）",
+      "titleEn": "6. Scenario Validation (Outdoor / Noisy / TV / Bluetooth)",
+      "questions": [
+        {
+          "id": "Q29",
+          "type": "rating_yesno",
+          "text": "户外散步和人对面说话，能听清吗？",
+          "textEn": "When walking outdoors and talking face-to-face, can you hear clearly?",
+          "yesnoLabel": "风噪是否明显？",
+          "yesnoLabelEn": "Is wind noise noticeable?",
+          "category": "场景验证",
+          "categoryEn": "Scenario Validation",
+          "purpose": "验证户外模式在行走对话中的表现与人声锁定。",
+          "purposeEn": "Validate outdoor mode performance in walking conversation and speech locking."
+        },
+        {
+          "id": "Q30",
+          "type": "rating1_5",
+          "text": "在餐厅/多人聊天时，能跟上对话吗？",
+          "textEn": "In restaurants/group conversations, can you follow the dialogue?",
+          "category": "场景验证",
+          "categoryEn": "Scenario Validation",
+          "purpose": "验证嘈杂社交场景（用于标定产品能力边界）。",
+          "purposeEn": "Validate noisy social scenarios (used to calibrate product capability boundaries)."
+        },
+        {
+          "id": "Q31",
+          "type": "rating_yesno",
+          "text": "看电视时（配电视伴侣），台词清楚吗？",
+          "textEn": "When watching TV (with TV streamer), are dialogue lines clear?",
+          "yesnoLabel": "不需要开很大声或字幕，也能听清吗？",
+          "yesnoLabelEn": "Can you hear clearly without turning up the volume or using subtitles?",
+          "category": "场景验证",
+          "categoryEn": "Scenario Validation",
+          "purpose": "验证电视伴侣首要价值（电视台词清晰度）。",
+          "purposeEn": "Validate TV streamer primary value (TV dialogue clarity)."
+        },
+        {
+          "id": "Q32",
+          "type": "rating1_5",
+          "text": "看电视时，声音和画面对得上吗（没有明显延迟/回声）？",
+          "textEn": "When watching TV, does audio sync with video (no noticeable delay/echo)?",
+          "category": "场景验证",
+          "categoryEn": "Scenario Validation",
+          "purpose": "验证音画同步。",
+          "purposeEn": "Validate audio-video synchronization."
+        },
+        {
+          "id": "Q33",
+          "type": "family_rating",
+          "text": "看电视时，家人觉得电视音量变小、少打扰了吗？",
+          "textEn": "When watching TV, does your family feel the TV volume is lower and less disturbing?",
+          "note": "本题需由同住家属作答",
+          "noteEn": "This question must be answered by a family member living with you",
+          "showIf": {
+            "question": "Q07",
+            "operator": "neq",
+            "value": "独居"
+          },
+          "category": "场景验证",
+          "categoryEn": "Scenario Validation",
+          "purpose": "从家属维度验证\"家庭音量冲突\"是否真正解决。",
+          "purposeEn": "Validate from the family perspective whether the \"household volume conflict\" is truly resolved."
+        },
+        {
+          "id": "Q34",
+          "type": "rating1_5",
+          "text": "连接蓝牙听手机/电视，连接稳定吗？（不断连、不卡顿、左右耳声音同步）",
+          "textEn": "When connected via Bluetooth to phone/TV, is the connection stable? (no disconnection, no stuttering, left-right audio in sync)",
+          "category": "场景验证",
+          "categoryEn": "Scenario Validation",
+          "purpose": "验证蓝牙稳定性（蓝牙卡顿、电流音、左右不同步）。",
+          "purposeEn": "Validate Bluetooth stability (Bluetooth stuttering, electrical hum, left-right desync)."
+        }
+      ]
+    },
+    {
+      "id": "overall",
+      "title": "七、整体与留存",
+      "titleEn": "7. Overall & Retention",
+      "questions": [
+        {
+          "id": "Q35",
+          "type": "text",
+          "text": "整体来说，哪些情况下戴着效果最好？（请具体写）",
+          "textEn": "Overall, in which situations does it work best? (Please be specific)",
+          "hint": "提示：建议写清楚具体场景，例如在哪里、和谁在一起、距离多远、环境安静还是嘈杂。",
+          "hintEn": "Tip: Please describe the specific situation — e.g., where you were, with whom, at what distance, and whether the environment was quiet or noisy.",
+          "placeholder": "请具体描述效果最好的场景",
+          "placeholderEn": "Please specifically describe the scenarios where it works best",
+          "category": "整体",
+          "categoryEn": "Overall",
+          "purpose": "定位产品优势场景，为卖点与人群匹配提供依据。",
+          "purposeEn": "Identify product advantage scenarios; provide basis for selling points and user matching."
+        },
+        {
+          "id": "Q36",
+          "type": "text",
+          "text": "最不满意、最想改善的是什么？（请尽量具体，如哪种环境听不清哪种声音不舒服）",
+          "textEn": "What are you most dissatisfied with and most want improved? (Please be as specific as possible, e.g., which environment is unclear, which sound is uncomfortable)",
+          "hint": "提示：建议写清楚哪种环境、什么声音、怎么听不清或不舒服；也可写功能或操作上希望改进的地方。",
+          "hintEn": "Tip: Please specify which environment, what kind of sound, and how it was unclear or uncomfortable; you may also mention features or operations you'd like improved.",
+          "placeholder": "请尽量具体描述",
+          "placeholderEn": "Please be as specific as possible",
+          "category": "整体",
+          "categoryEn": "Overall",
+          "purpose": "定位首要整改项，直接对接迭代优先级。",
+          "purposeEn": "Identify primary improvement items; directly map to iteration priorities."
+        },
+        {
+          "id": "Q37",
+          "type": "rating0_10",
+          "text": "如果把这套产品给同样看电视困难的亲友，您愿意推荐吗？",
+          "textEn": "If you gave this product to a friend/relative who also has difficulty watching TV, how likely would you be to recommend it?",
+          "category": "留存",
+          "categoryEn": "Retention",
+          "purpose": "验证口碑与推荐意愿（NPS）。",
+          "purposeEn": "Validate word-of-mouth and recommendation willingness (NPS)."
+        },
+        {
+          "id": "Q38",
+          "type": "rating1_5",
+          "text": "试用结束后，您愿意继续每天佩戴使用吗？",
+          "textEn": "After the trial period, would you be willing to continue wearing it daily?",
+          "category": "留存",
+          "categoryEn": "Retention",
+          "purpose": "验证留存意愿与退货红线（不愿用≈高退货风险）。",
+          "purposeEn": "Validate retention willingness and return red line (unwilling to use ≈ high return risk)."
+        },
+        {
+          "id": "Q39",
+          "type": "rating1_5",
+          "text": "您觉得这个产品，对得起它的价格吗？",
+          "textEn": "Do you feel this product is worth its price?",
+          "category": "整体",
+          "categoryEn": "Overall",
+          "purpose": "验证价格与价值匹配度。",
+          "purposeEn": "Validate price-value match."
+        }
+      ]
+    }
+  ]
+}

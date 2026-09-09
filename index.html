@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1a5632">
+<title>TE102 助听器用户内测问卷</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#f4f6f5;--surface:#fff;--bd:#e2e5e3;--bd2:#cfd3d0;
+  --text:#1a1d1b;--muted:#7a7f7c;--faint:#b8bdba;
+  --primary:#1a5632;--primary-light:#e8f2ec;--primary-bd:#7ab894;
+  --accent:#0f766e;--accent-bg:#f0fdfa;
+  --warn:#92400e;--warn-bg:#fffbeb;--warn-bd:#fbbf24;
+  --danger:#b91c1c;--danger-bg:#fef2f2;
+  --r:10px;--rl:14px;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04)
+}
+html{font-size:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.65;min-height:100vh;padding-bottom:80px}
+.app{max-width:640px;margin:0 auto;padding:12px 14px 40px}
+
+/* Header */
+.hdr{background:linear-gradient(135deg,var(--primary),#2d7a4a);color:#fff;border-radius:var(--rl);padding:18px 20px;margin-bottom:14px;box-shadow:var(--shadow);position:relative}
+.hdr h1{font-size:17px;font-weight:600;margin-bottom:4px;letter-spacing:.3px;padding-right:60px}
+.hdr .sub{font-size:12px;opacity:.85}
+.hdr .meta{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.hdr .tag{font-size:11px;background:rgba(255,255,255,.18);padding:3px 10px;border-radius:20px;backdrop-filter:blur(4px)}
+
+/* Language switcher */
+.lang-switch{position:absolute;top:14px;right:14px;display:flex;background:rgba(255,255,255,.2);border-radius:20px;padding:2px;backdrop-filter:blur(4px)}
+.lang-btn{border:none;background:transparent;color:rgba(255,255,255,.7);font-size:12px;font-weight:600;padding:5px 12px;border-radius:16px;cursor:pointer;transition:all .2s;font-family:inherit}
+.lang-btn.active{background:#fff;color:var(--primary)}
+.lang-btn:active{transform:scale(.95)}
+
+/* Progress */
+.progress-wrap{position:sticky;top:0;z-index:50;background:var(--bg);padding:8px 0 10px;margin:0 -14px;padding-left:14px;padding-right:14px}
+.progress-bar{height:6px;background:var(--bd);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:3px;transition:width .3s ease;width:0%}
+.progress-text{font-size:11px;color:var(--muted);text-align:right;margin-top:4px}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--bd);border-radius:var(--rl);padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.section-title{font-size:15px;font-weight:600;color:var(--primary);margin-bottom:4px;padding-bottom:8px;border-bottom:2px solid var(--primary-light);display:flex;align-items:center;gap:8px}
+.section-title .num{background:var(--primary);color:#fff;width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.section-desc{font-size:12px;color:var(--muted);margin:8px 0 12px}
+
+/* Question */
+.q{margin-bottom:18px;padding-bottom:16px;border-bottom:1px dashed var(--bd)}
+.q:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.q-head{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start}
+.q-num{background:var(--primary-light);color:var(--primary);font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;flex-shrink:0;min-width:36px;text-align:center}
+.q-cat{font-size:10px;color:var(--muted);background:var(--bg);padding:2px 6px;border-radius:3px;flex-shrink:0}
+.q-text{font-size:14.5px;font-weight:500;line-height:1.55;flex:1}
+.q-note{font-size:11px;color:var(--warn);background:var(--warn-bg);padding:4px 8px;border-radius:4px;margin-top:6px;display:inline-block}
+
+/* Options */
+.opts{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1.5px solid var(--bd);border-radius:var(--r);cursor:pointer;transition:all .15s;font-size:14px;background:var(--surface)}
+.opt:active{transform:scale(.98)}
+.opt.selected{border-color:var(--primary);background:var(--primary-light);color:var(--primary);font-weight:500}
+.opt input{display:none}
+.opt .check{width:18px;height:18px;border:2px solid var(--bd2);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.opt.selected .check{border-color:var(--primary);background:var(--primary)}
+.opt.selected .check::after{content:'';width:6px;height:6px;background:#fff;border-radius:50%}
+.opt.checkbox .check{border-radius:4px}
+.opt.checkbox.selected .check::after{content:'✓';width:auto;height:auto;background:none;color:#fff;font-size:11px;font-weight:bold}
+
+/* Rating - segmented style (full width, connected) */
+.rating{display:flex;width:100%;margin-top:8px;border:1.5px solid var(--bd);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.rating-btn{flex:1;height:44px;border:none;border-right:1px solid var(--bd);background:var(--surface);font-size:15px;font-weight:600;color:var(--text);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;position:relative}
+.rating-btn:last-child{border-right:none}
+.rating-btn:active{background:var(--primary-light)}
+.rating-btn.selected{background:var(--primary);color:#fff}
+.rating-btn.selected + .rating-btn{border-left-color:var(--primary)}
+.rating-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:4px;padding:0 2px}
+.rating-group{margin-bottom:10px}
+.rating-group-label{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:4px}
+
+/* 0-10 rating special */
+.rating.rating-0-10 .rating-btn{height:38px;font-size:13px}
+
+/* Text input */
+.text-input,.text-area{width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:var(--r);font-size:14px;font-family:inherit;background:var(--surface);color:var(--text);transition:border-color .15s;margin-top:6px}
+.text-input:focus,.text-area:focus{outline:none;border-color:var(--primary)}
+.text-area{min-height:70px;resize:vertical}
+.text-label{font-size:12px;color:var(--muted);margin-top:8px;display:block}
+
+/* Yes/No */
+.yesno{display:flex;gap:8px;margin-top:8px}
+.yesno .opt{flex:1;justify-content:center}
+
+/* Info form */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.info-grid .full{grid-column:1/-1}
+.info-item label{font-size:12px;color:var(--muted);display:block;margin-bottom:4px}
+.info-item input{width:100%;padding:9px 12px;border:1.5px solid var(--bd);border-radius:var(--r);font-size:14px;font-family:inherit}
+.info-item input:focus{outline:none;border-color:var(--primary)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 20px;border:none;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:#154528}
+.btn-outline{background:var(--surface);color:var(--primary);border:1.5px solid var(--primary-bd)}
+.btn-warn{background:var(--warn-bg);color:var(--warn);border:1.5px solid var(--warn-bd)}
+.btn-danger{background:var(--danger-bg);color:var(--danger);border:1.5px solid #fca5a5}
+.btn-sm{padding:8px 14px;font-size:13px}
+.btn-block{width:100%}
+
+/* Bottom bar */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--bd);padding:10px 14px;display:flex;gap:8px;z-index:100;box-shadow:0 -2px 8px rgba(0,0,0,.06)}
+.bottom-bar .btn{flex:1}
+
+/* Result panel */
+.result-panel{display:none}
+.result-panel.show{display:block}
+.result-summary{background:var(--accent-bg);border:1px solid #99f6e4;border-radius:var(--rl);padding:14px 16px;margin-bottom:12px}
+.result-summary h3{font-size:14px;color:var(--accent);margin-bottom:8px}
+.score-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #ccfbf1;font-size:13px}
+.score-row:last-child{border-bottom:none}
+.score-row .label{color:var(--text)}
+.score-row .val{font-weight:600;color:var(--accent)}
+.score-row .val.low{color:var(--danger)}
+
+/* Export buttons */
+.export-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.export-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 8px;border:1.5px solid var(--bd);border-radius:var(--r);background:var(--surface);cursor:pointer;transition:all .15s;font-size:12px;color:var(--text)}
+.export-btn:active{transform:scale(.97)}
+.export-btn .icon{font-size:22px}
+.export-btn:hover{border-color:var(--primary);background:var(--primary-light)}
+
+/* Answer review */
+.review-item{padding:8px 0;border-bottom:1px solid var(--bd);font-size:13px}
+.review-item .q-label{color:var(--muted);font-size:11px;margin-bottom:2px}
+.review-item .q-answer{font-weight:500}
+.review-item .q-answer.empty{color:var(--faint);font-style:italic}
+
+/* Toast */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(26,29,27,.92);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90%;text-align:center}
+.toast.show{opacity:1}
+
+/* Print styles */
+@media print{
+  body{background:#fff;padding:0}
+  .app{max-width:100%;padding:0}
+  .bottom-bar,.progress-wrap,.no-print{display:none!important}
+  .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
+  .hdr{background:#1a5632!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .opt.selected,.rating-btn.selected{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
+/* Responsive */
+@media(max-width:380px){
+  .app{padding:10px 10px 30px}
+  .card{padding:14px}
+  .rating-btn{height:40px;font-size:14px}
+  .rating.rating-0-10 .rating-btn{height:34px;font-size:11px}
+  .info-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+  <!-- Header -->
+  <div class="hdr">
+    <div class="lang-switch no-print">
+      <button class="lang-btn active" data-lang="zh" onclick="switchLang('zh')">中文</button>
+      <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+    </div>
+    <h1 id="hdrTitle">TE102 助听器用户内测问卷</h1>
+    <div class="sub" id="hdrSub">含电视伴侣 + APP · 内测版本 20260724</div>
+    <div class="meta">
+      <span class="tag" id="tagTotal">共 39 题</span>
+      <span class="tag" id="tagDim">7 大维度</span>
+      <span class="tag" id="tagTime">约 10-15 分钟</span>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap no-print">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">0 / 39</div>
+  </div>
+
+  <!-- Survey View -->
+  <div id="surveyView">
+    <!-- Info Card -->
+    <div class="card">
+      <div class="section-title"><span class="num">i</span> <span id="infoTitle">基本信息</span></div>
+      <div class="info-grid" style="margin-top:12px">
+        <div class="info-item">
+          <label id="lblSubject">受试者编号</label>
+          <input type="text" id="info-subject" placeholder="如：S001" value="">
+        </div>
+        <div class="info-item">
+          <label id="lblDate">测试日期 *</label>
+          <input type="date" id="info-date" value="">
+        </div>
+        <div class="info-item">
+          <label id="lblTester">测试员</label>
+          <input type="text" id="info-tester" placeholder="姓名">
+        </div>
+        <div class="info-item">
+          <label id="lblPhone">联系电话</label>
+          <input type="tel" id="info-phone" placeholder="选填">
+        </div>
+        <div class="info-item full">
+          <label id="lblNote">备注</label>
+          <input type="text" id="info-note" placeholder="其他需要记录的信息">
+        </div>
+      </div>
+    </div>
+
+    <!-- Questions will be rendered here -->
+    <div id="questionsContainer"></div>
+  </div>
+
+  <!-- Result View -->
+  <div id="resultView" class="result-panel">
+    <div class="card">
+      <div class="section-title"><span class="num">✓</span> <span id="resultDoneTitle">问卷已完成</span></div>
+      <div class="result-summary" id="resultSummary"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><span class="num">📋</span> <span id="reviewTitle">答题详情</span></div>
+      <div id="reviewList" style="margin-top:8px;max-height:400px;overflow-y:auto"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><span class="num">📤</span> <span id="exportTitle">导出结果</span></div>
+      <p style="font-size:12px;color:var(--muted);margin:8px 0" id="exportDesc">选择导出格式，便于后续分析与存档。</p>
+      <div class="export-grid">
+        <div class="export-btn" onclick="exportJSON()">
+          <span class="icon">📄</span>
+          <span id="expJson">JSON 完整数据</span>
+        </div>
+        <div class="export-btn" onclick="exportCSV()">
+          <span class="icon">📊</span>
+          <span id="expCsv">CSV 表格（Excel分析）</span>
+        </div>
+        <div class="export-btn" onclick="window.print()">
+          <span class="icon">🖨️</span>
+          <span id="expPdf">打印 / 存为 PDF</span>
+        </div>
+        <div class="export-btn" onclick="sendEmail()">
+          <span class="icon">✉️</span>
+          <span id="expEmail">邮件发送</span>
+        </div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm" style="flex:1" onclick="backToEdit()" id="btnBack">返回修改</button>
+        <button class="btn btn-warn btn-sm" style="flex:1" onclick="resetAll()" id="btnReset">重新填写</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Bar -->
+<div class="bottom-bar no-print" id="bottomBar">
+  <button class="btn btn-outline" onclick="saveDraft()" style="flex:0 0 auto" id="btnSave">💾 暂存</button>
+  <button class="btn btn-primary btn-block" onclick="submitSurvey()" id="btnSubmit">提交问卷</button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ i18n DICTIONARY ============
+const I18N = {
+  zh: {
+    hdrTitle: 'TE102 助听器用户内测问卷',
+    hdrSub: '含电视伴侣 + APP · 内测版本 20260724',
+    tagTotal: '共 39 题',
+    tagDim: '7 大维度',
+    tagTime: '约 10-15 分钟',
+    infoTitle: '基本信息',
+    lblSubject: '受试者编号',
+    lblDate: '测试日期 *',
+    lblTester: '测试员',
+    lblPhone: '联系电话',
+    lblNote: '备注',
+    phSubject: '如：S001',
+    phTester: '姓名',
+    phPhone: '选填',
+    phNote: '其他需要记录的信息',
+    progressFmt: '{answered} / {total} 已完成（{pct}%）',
+    btnSave: '💾 暂存',
+    btnSubmit: '提交问卷',
+    btnBack: '返回修改',
+    btnReset: '重新填写',
+    resultDoneTitle: '问卷已完成',
+    reviewTitle: '答题详情',
+    exportTitle: '导出结果',
+    exportDesc: '选择导出格式，便于后续分析与存档。',
+    expJson: 'JSON 完整数据',
+    expCsv: 'CSV 表格（Excel分析）',
+    expPdf: '打印 / 存为 PDF',
+    expEmail: '邮件发送',
+    avgScoreTitle: '各维度平均得分（1-5分制）',
+    npsLabel: '推荐意愿 (NPS 0-10)',
+    unanswered: '未作答',
+    noRating: '无打分题',
+    scoreFmt: '{avg} 分（{count}/{total}题）',
+    toastSaved: '已暂存到本地',
+    toastReset: '已重置',
+    toastJson: 'JSON 已下载',
+    toastCsv: 'CSV 已下载（可用Excel打开）',
+    toastEmail: '已打开邮件客户端，请手动附加导出的JSON/CSV文件',
+    toastDraftRestored: '已恢复上次暂存',
+    confirmUnanswered: '还有 {n} 题未作答，是否继续提交？\n未答题目将标记为"未作答"。',
+    confirmReset: '确定要清空所有答案重新填写吗？此操作不可撤销。',
+    errDate: '请选择测试日期',
+    ratingLabels1_5: ['非常差', '非常好'],
+    ratingLabels0_10: ['完全不会推荐', '一定会推荐'],
+    ratingLabelsDist: ['差', '好'],
+    familyNote: '👨‍👩‍👧 本题需由同住家属作答',
+    yes: '是',
+    no: '否',
+    emailSubject: 'TE102内测问卷结果',
+    emailAvgTitle: '===== 各维度平均分 =====',
+    emailDetailTitle: '===== 详细答题 =====',
+    emailFooter: '（本邮件由TE102问卷系统自动生成，详细数据请附件JSON/CSV文件）',
+    avgScoreLabel: '平均分'
+  },
+  en: {
+    hdrTitle: 'TE102 Hearing Aid User Beta Survey',
+    hdrSub: 'With TV Streamer + APP · Beta Version 20260724',
+    tagTotal: '39 Questions',
+    tagDim: '7 Dimensions',
+    tagTime: '~10-15 min',
+    infoTitle: 'Basic Information',
+    lblSubject: 'Subject ID',
+    lblDate: 'Test Date *',
+    lblTester: 'Tester',
+    lblPhone: 'Phone',
+    lblNote: 'Notes',
+    phSubject: 'e.g., S001',
+    phTester: 'Name',
+    phPhone: 'Optional',
+    phNote: 'Other information to record',
+    progressFmt: '{answered} / {total} completed ({pct}%)',
+    btnSave: '💾 Save Draft',
+    btnSubmit: 'Submit',
+    btnBack: 'Back to Edit',
+    btnReset: 'Start Over',
+    resultDoneTitle: 'Survey Completed',
+    reviewTitle: 'Answer Details',
+    exportTitle: 'Export Results',
+    exportDesc: 'Choose an export format for further analysis and archiving.',
+    expJson: 'JSON Full Data',
+    expCsv: 'CSV (for Excel)',
+    expPdf: 'Print / Save as PDF',
+    expEmail: 'Send via Email',
+    avgScoreTitle: 'Average Score by Dimension (1-5 scale)',
+    npsLabel: 'Recommendation (NPS 0-10)',
+    unanswered: 'Not answered',
+    noRating: 'No rating questions',
+    scoreFmt: '{avg} pts ({count}/{total} q)',
+    toastSaved: 'Draft saved locally',
+    toastReset: 'Reset complete',
+    toastJson: 'JSON downloaded',
+    toastCsv: 'CSV downloaded (open with Excel)',
+    toastEmail: 'Email client opened. Please attach the exported JSON/CSV file manually.',
+    toastDraftRestored: 'Previous draft restored',
+    confirmUnanswered: '{n} questions remain unanswered. Continue submitting?\nUnanswered questions will be marked as "Not answered".',
+    confirmReset: 'Are you sure you want to clear all answers and start over? This cannot be undone.',
+    errDate: 'Please select the test date',
+    ratingLabels1_5: ['Very Poor', 'Excellent'],
+    ratingLabels0_10: ['Not at all likely', 'Extremely likely'],
+    ratingLabelsDist: ['Poor', 'Good'],
+    familyNote: '👨‍👩‍👧 This question must be answered by a family member living with you',
+    yes: 'Yes',
+    no: 'No',
+    emailSubject: 'TE102 Beta Survey Result',
+    emailAvgTitle: '===== Average Score by Dimension =====',
+    emailDetailTitle: '===== Detailed Answers =====',
+    emailFooter: '(This email was auto-generated by the TE102 Survey System. For detailed data, please attach the JSON/CSV file.)',
+    avgScoreLabel: 'Avg Score'
+  }
+};
+
+// ============ STATE ============
+let QUESTIONS = null;
+let answers = {};
+let currentLang = 'zh';
+const STORAGE_KEY = 'te102_survey_draft';
+const LANG_KEY = 'te102_survey_lang';
+
+// ============ HELPERS ============
+function t(key) {
+  return I18N[currentLang][key] || I18N.zh[key] || key;
+}
+function tf(key, vars) {
+  let s = t(key);
+  for (const k in vars) s = s.replace('{' + k + '}', vars[k]);
+  return s;
+}
+function qText(q) {
+  return currentLang === 'en' ? (q.textEn || q.text) : q.text;
+}
+function qCat(q) {
+  return currentLang === 'en' ? (q.categoryEn || q.category) : q.category;
+}
+function qOptions(q) {
+  return currentLang === 'en' ? (q.optionsEn || q.options) : q.options;
+}
+function qField(q, field) {
+  const enField = field + 'En';
+  return currentLang === 'en' ? (q[enField] || q[field]) : q[field];
+}
+
+// ============ LANGUAGE ============
+function switchLang(lang) {
+  currentLang = lang;
+  localStorage.setItem(LANG_KEY, lang);
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+  document.title = t('hdrTitle');
+  applyStaticTexts();
+  renderQuestions();
+  restoreAnswers();
+  updateConditionalVisibility();
+  updateProgress();
+  // If result view is visible, re-render it
+  if (document.getElementById('resultView').classList.contains('show')) {
+    renderResultSummary();
+    renderReview();
+  }
+}
+
+function applyStaticTexts() {
+  const map = {
+    hdrTitle: 'textContent', hdrSub: 'textContent',
+    tagTotal: 'textContent', tagDim: 'textContent', tagTime: 'textContent',
+    infoTitle: 'textContent',
+    lblSubject: 'textContent', lblDate: 'textContent', lblTester: 'textContent',
+    lblPhone: 'textContent', lblNote: 'textContent',
+    btnSave: 'textContent', btnSubmit: 'textContent',
+    btnBack: 'textContent', btnReset: 'textContent',
+    resultDoneTitle: 'textContent', reviewTitle: 'textContent',
+    exportTitle: 'textContent', exportDesc: 'textContent',
+    expJson: 'textContent', expCsv: 'textContent', expPdf: 'textContent', expEmail: 'textContent'
+  };
+  for (const [id, prop] of Object.entries(map)) {
+    const el = document.getElementById(id);
+    if (el) el[prop] = t(id);
+  }
+  // Placeholders
+  document.getElementById('info-subject').placeholder = t('phSubject');
+  document.getElementById('info-tester').placeholder = t('phTester');
+  document.getElementById('info-phone').placeholder = t('phPhone');
+  document.getElementById('info-note').placeholder = t('phNote');
+  // Lang buttons
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === currentLang);
+  });
+}
+
+// ============ IP GEOLOCATION ============
+async function detectLanguageByIP() {
+  // Check saved preference first
+  const saved = localStorage.getItem(LANG_KEY);
+  if (saved === 'zh' || saved === 'en') {
+    currentLang = saved;
+    return;
+  }
+  try {
+    const resp = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(5000) });
+    const data = await resp.json();
+    const country = (data.country_code || '').toUpperCase();
+    // Chinese-speaking regions: CN, HK, MO, TW, SG
+    const zhCountries = ['CN', 'HK', 'MO', 'TW', 'SG'];
+    currentLang = zhCountries.includes(country) ? 'zh' : 'en';
+    console.log('IP geolocation:', country, '→ lang:', currentLang);
+  } catch (e) {
+    console.log('IP detection failed, falling back to browser language:', e.message);
+    const navLang = (navigator.language || 'en').toLowerCase();
+    currentLang = navLang.startsWith('zh') ? 'zh' : 'en';
+  }
+}
+
+// ============ INIT ============
+async function init() {
+  await detectLanguageByIP();
+  document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
+  document.title = t('hdrTitle');
+  applyStaticTexts();
+
+  try {
+    const resp = await fetch('questions.json?t=' + Date.now());
+    QUESTIONS = await resp.json();
+  } catch(e) {
+    console.error('Failed to load questions.json:', e);
+    showToast(currentLang === 'zh' ? '问卷数据加载失败，请检查网络' : 'Failed to load survey data');
+    return;
+  }
+  renderQuestions();
+  loadDraft();
+  setDefaultDate();
+  setDefaultSubject();
+  updateConditionalVisibility();
+  updateProgress();
+}
+
+function setDefaultDate() {
+  const today = new Date().toISOString().split('T')[0];
+  const el = document.getElementById('info-date');
+  if (!el.value) el.value = today;
+}
+
+function setDefaultSubject() {
+  const el = document.getElementById('info-subject');
+  if (!el.value) el.value = 'S001';
+}
+
+// ============ RENDER ============
+function renderQuestions() {
+  const container = document.getElementById('questionsContainer');
+  let html = '';
+  let qNum = 0;
+
+  QUESTIONS.sections.forEach((section, si) => {
+    html += `<div class="card">
+      <div class="section-title"><span class="num">${si+1}</span> ${qField(section, 'title')}</div>`;
+    if (section.description || section.descriptionEn) {
+      html += `<div class="section-desc">${qField(section, 'description')}</div>`;
+    }
+    section.questions.forEach(q => {
+      qNum++;
+      html += renderQuestion(q, qNum);
+    });
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+// ============ CONDITIONAL VISIBILITY ============
+function updateConditionalVisibility() {
+  const allQs = QUESTIONS.sections.flatMap(s => s.questions);
+  document.querySelectorAll('.q[data-show-if]').forEach(card => {
+    let cond;
+    try { cond = JSON.parse(card.dataset.showIf); } catch(e) { return; }
+    const val = answers[cond.question];
+    // showIf 的 value 以中文定义；英文模式下答案是英文选项文本，需同时匹配两种语言
+    const condVals = [cond.value];
+    const ctrl = allQs.find(q => q.id === cond.question);
+    const idx = ctrl && ctrl.options ? ctrl.options.indexOf(cond.value) : -1;
+    if (idx >= 0 && ctrl.optionsEn && ctrl.optionsEn[idx]) condVals.push(ctrl.optionsEn[idx]);
+    let show = true;
+    if (val !== undefined && val !== '') {
+      if (cond.operator === 'neq') show = !condVals.includes(val);
+      else if (cond.operator === 'eq') show = condVals.includes(val);
+    }
+    card.style.display = show ? '' : 'none';
+  });
+}
+
+function isQuestionHidden(qid) {
+  const card = document.getElementById('q-' + qid);
+  return card && card.style.display === 'none';
+}
+
+function renderQuestion(q, num) {
+  let body = '';
+  const qid = q.id;
+  const labels1_5 = t('ratingLabels1_5');
+  const labels0_10 = t('ratingLabels0_10');
+  const labelsDist = t('ratingLabelsDist');
+
+  switch(q.type) {
+    case 'radio':
+    case 'radio_text':
+      body = `<div class="opts">`;
+      qOptions(q).forEach((opt, i) => {
+        body += `<label class="opt" data-q="${qid}" data-val="${opt}">
+          <span class="check"></span><span>${opt}</span>
+        </label>`;
+      });
+      body += `</div>`;
+      if (q.type === 'radio_text') {
+        body += `<span class="text-label">${qField(q, 'textLabel')}</span>
+          <textarea class="text-area" data-q="${qid}_text" placeholder="${qField(q, 'textPlaceholder')}" rows="3"></textarea>`;
+      }
+      break;
+
+    case 'checkbox':
+      body = `<div class="opts">`;
+      qOptions(q).forEach(opt => {
+        body += `<label class="opt checkbox" data-q="${qid}" data-val="${opt}">
+          <span class="check"></span><span>${opt}</span>
+        </label>`;
+      });
+      body += `</div>`;
+      break;
+
+    case 'yesno':
+      body = `<div class="yesno">
+        <label class="opt" data-q="${qid}" data-val="${t('yes')}"><span class="check"></span><span>${t('yes')}</span></label>
+        <label class="opt" data-q="${qid}" data-val="${t('no')}"><span class="check"></span><span>${t('no')}</span></label>
+      </div>`;
+      break;
+
+    case 'rating1_5':
+      body = renderRating(qid, 1, 5, labels1_5, false);
+      break;
+
+    case 'rating0_10':
+      body = renderRating(qid, 0, 10, labels0_10, true);
+      break;
+
+    case 'rating_distance':
+      body = '';
+      const subLabels = qField(q, 'subLabels');
+      subLabels.forEach((label, idx) => {
+        body += `<div class="rating-group">
+          <div class="rating-group-label">${label}</div>
+          ${renderRating(qid + '_d' + idx, 1, 5, labelsDist, false)}
+        </div>`;
+      });
+      break;
+
+    case 'rating_text':
+      body = renderRating(qid, 1, 5, labels1_5, false);
+      body += `<span class="text-label">${qField(q, 'textLabel')}</span>
+        <textarea class="text-area" data-q="${qid}_text" placeholder="${qField(q, 'textPlaceholder')}" rows="3"></textarea>`;
+      break;
+
+    case 'rating_yesno':
+      body = renderRating(qid, 1, 5, labels1_5, false);
+      body += `<span class="text-label">${qField(q, 'yesnoLabel')}</span>
+        <div class="yesno">
+          <label class="opt" data-q="${qid}_yn" data-val="${t('yes')}"><span class="check"></span><span>${t('yes')}</span></label>
+          <label class="opt" data-q="${qid}_yn" data-val="${t('no')}"><span class="check"></span><span>${t('no')}</span></label>
+        </div>`;
+      break;
+
+    case 'family_rating':
+      body = `<div class="q-note">${t('familyNote')}</div>`;
+      body += renderRating(qid, 1, 5, labels1_5, false);
+      break;
+
+    case 'text': {
+      // 开放题：常驻显示引导提示，纯手动作答，不提供预设选项（避免干扰）
+      const hint = qField(q, 'hint');
+      body = (hint ? `<div class="text-label">${hint}</div>` : '') +
+        `<textarea class="text-area" data-q="${qid}" placeholder="${qField(q, 'placeholder')}"></textarea>`;
+      break;
+    }
+  }
+
+  const showIfAttr = q.showIf ? ` data-show-if='${JSON.stringify(q.showIf)}'` : '';
+  return `<div class="q" id="q-${qid}"${showIfAttr}>
+    <div class="q-head">
+      <span class="q-num">${num}</span>
+      <span class="q-cat">${qCat(q)}</span>
+      <span class="q-text">${qText(q)}</span>
+    </div>
+    ${q.note || q.noteEn ? `<div class="q-note">${qField(q, 'note')}</div>` : ''}
+    ${body}
+  </div>`;
+}
+
+function renderRating(qid, min, max, labels, is010) {
+  let btns = '';
+  for (let i = min; i <= max; i++) {
+    btns += `<button class="rating-btn" data-q="${qid}" data-val="${i}">${i}</button>`;
+  }
+  const cls = is010 ? 'rating rating-0-10' : 'rating';
+  return `<div class="${cls}">${btns}</div>
+    <div class="rating-labels"><span>${labels[0]}</span><span>${labels[1]}</span></div>`;
+}
+
+// ============ INTERACTION ============
+document.addEventListener('click', function(e) {
+  const opt = e.target.closest('.opt');
+  if (opt) {
+    const qid = opt.dataset.q;
+    const val = opt.dataset.val;
+    const isCheckbox = opt.classList.contains('checkbox');
+
+    if (isCheckbox) {
+      opt.classList.toggle('selected');
+      const selected = document.querySelectorAll(`.opt.checkbox.selected[data-q="${qid}"]`);
+      answers[qid] = Array.from(selected).map(el => el.dataset.val);
+    } else {
+      document.querySelectorAll(`.opt[data-q="${qid}"]`).forEach(el => el.classList.remove('selected'));
+      opt.classList.add('selected');
+      answers[qid] = val;
+    }
+    // 选项变化后立即更新条件显示（如 Q07 选"独居"时隐藏 Q33），再刷新进度
+    updateConditionalVisibility();
+    updateProgress();
+    autoSave();
+    return;
+  }
+
+  const rbtn = e.target.closest('.rating-btn');
+  if (rbtn) {
+    const qid = rbtn.dataset.q;
+    const val = parseInt(rbtn.dataset.val);
+    document.querySelectorAll(`.rating-btn[data-q="${qid}"]`).forEach(el => el.classList.remove('selected'));
+    rbtn.classList.add('selected');
+    answers[qid] = val;
+    updateConditionalVisibility();
+    updateProgress();
+    autoSave();
+  }
+});
+
+document.addEventListener('input', function(e) {
+  const el = e.target;
+  if (el.dataset && el.dataset.q) {
+    answers[el.dataset.q] = el.value;
+    autoSave();
+  }
+});
+
+document.addEventListener('change', function(e) {
+  const el = e.target;
+  if (el.dataset && el.dataset.q) {
+    answers[el.dataset.q] = el.value;
+    updateProgress();
+    autoSave();
+    updateConditionalVisibility();
+  }
+});
+
+// ============ PROGRESS ============
+function getTotalQuestions() {
+  let count = 0;
+  QUESTIONS.sections.forEach(s => count += s.questions.length);
+  return count;
+}
+
+function isQuestionAnswered(q) {
+  const qid = q.id;
+  // 条件隐藏的题目视为已答，不要求必填
+  if (isQuestionHidden(qid)) return true;
+  switch(q.type) {
+    case 'radio':
+    case 'yesno':
+    case 'rating1_5':
+    case 'rating0_10':
+    case 'family_rating':
+      return answers[qid] !== undefined && answers[qid] !== '';
+    case 'radio_text':
+    case 'rating_text':
+      return answers[qid] !== undefined && answers[qid] !== '';
+    case 'rating_yesno':
+      return answers[qid] !== undefined && answers[qid] !== '';
+    case 'rating_distance':
+      return answers[qid + '_d0'] !== undefined && answers[qid + '_d1'] !== undefined;
+    case 'checkbox':
+      return answers[qid] && answers[qid].length > 0;
+    case 'text':
+      return answers[qid] && answers[qid].trim() !== '';
+    default:
+      return false;
+  }
+}
+
+function updateProgress() {
+  const total = getTotalQuestions();
+  let answered = 0;
+  QUESTIONS.sections.forEach(s => s.questions.forEach(q => {
+    if (isQuestionAnswered(q)) answered++;
+  }));
+  const pct = Math.round((answered / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = tf('progressFmt', {answered, total, pct});
+}
+
+// ============ SUBMIT ============
+function submitSurvey() {
+  const date = document.getElementById('info-date').value;
+
+  if (!date) { showToast(t('errDate')); document.getElementById('info-date').focus(); return; }
+
+  const unanswered = [];
+  QUESTIONS.sections.forEach(s => s.questions.forEach(q => {
+    if (!isQuestionAnswered(q)) unanswered.push(q.id);
+  }));
+
+  if (unanswered.length > 0) {
+    if (!confirm(tf('confirmUnanswered', {n: unanswered.length}))) {
+      const first = document.getElementById('q-' + unanswered[0]);
+      if (first) first.scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+  }
+
+  showResult();
+}
+
+function showResult() {
+  document.getElementById('surveyView').style.display = 'none';
+  document.getElementById('resultView').classList.add('show');
+  document.getElementById('bottomBar').style.display = 'none';
+  window.scrollTo(0, 0);
+  renderResultSummary();
+  renderReview();
+}
+
+function backToEdit() {
+  document.getElementById('surveyView').style.display = 'block';
+  document.getElementById('resultView').classList.remove('show');
+  document.getElementById('bottomBar').style.display = 'flex';
+}
+
+// ============ RESULT SUMMARY ============
+function renderResultSummary() {
+  const categories = {};
+  QUESTIONS.sections.forEach(s => s.questions.forEach(q => {
+    if (isQuestionHidden(q.id)) return; // 跳过条件隐藏的题目
+    const cat = qCat(q);
+    if (!categories[cat]) categories[cat] = { total: 0, sum: 0, count: 0 };
+    categories[cat].total++;
+    const val = answers[q.id];
+    if (typeof val === 'number' && val >= 1 && val <= 5) {
+      categories[cat].sum += val;
+      categories[cat].count++;
+    }
+  }));
+
+  let html = `<h3>${t('avgScoreTitle')}</h3>`;
+  for (const [cat, data] of Object.entries(categories)) {
+    if (data.count > 0) {
+      const avg = (data.sum / data.count).toFixed(2);
+      const low = parseFloat(avg) < 3.5;
+      html += `<div class="score-row"><span class="label">${cat}</span>
+        <span class="val ${low ? 'low' : ''}">${tf('scoreFmt', {avg, count: data.count, total: data.total})}</span></div>`;
+    } else {
+      html += `<div class="score-row"><span class="label">${cat}</span>
+        <span class="val">${t('noRating')}</span></div>`;
+    }
+  }
+
+  const nps = answers['Q37'];
+  if (nps !== undefined) {
+    html += `<div class="score-row" style="margin-top:8px;border-top:2px solid #99f6e4;padding-top:10px">
+      <span class="label">${t('npsLabel')}</span>
+      <span class="val ${nps < 6 ? 'low' : ''}">${nps} / 10</span></div>`;
+  }
+
+  document.getElementById('resultSummary').innerHTML = html;
+}
+
+function renderReview() {
+  let html = '';
+  let num = 0;
+  QUESTIONS.sections.forEach(s => s.questions.forEach(q => {
+    num++;
+    const ans = getAnswerDisplay(q);
+    html += `<div class="review-item">
+      <div class="q-label">${currentLang === 'zh' ? '第' : 'Q'}${num} · ${qCat(q)} · ${q.id}</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:2px">${qText(q)}</div>
+      <div class="q-answer ${ans === t('unanswered') ? 'empty' : ''}">${ans}</div>
+    </div>`;
+  }));
+  document.getElementById('reviewList').innerHTML = html;
+}
+
+function getAnswerDisplay(q) {
+  const qid = q.id;
+  // 条件隐藏的题目显示为"不适用"
+  if (isQuestionHidden(qid)) return currentLang === 'zh' ? '不适用（独居）' : 'N/A (living alone)';
+  switch(q.type) {
+    case 'radio':
+    case 'yesno':
+      return answers[qid] || t('unanswered');
+    case 'radio_text':
+      let rt = answers[qid] || t('unanswered');
+      if (answers[qid + '_text']) rt += `（${answers[qid + '_text']}）`;
+      return rt;
+    case 'checkbox':
+      return (answers[qid] && answers[qid].length > 0) ? answers[qid].join('、') : t('unanswered');
+    case 'rating1_5':
+    case 'rating0_10':
+    case 'family_rating':
+      return answers[qid] !== undefined ? answers[qid] + ' / ' + (q.type === 'rating0_10' ? '10' : '5') : t('unanswered');
+    case 'rating_text':
+      let rtxt = answers[qid] !== undefined ? answers[qid] + ' / 5' : t('unanswered');
+      if (answers[qid + '_text']) rtxt += `（${answers[qid + '_text']}）`;
+      return rtxt;
+    case 'rating_yesno':
+      let ry = answers[qid] !== undefined ? answers[qid] + ' / 5' : t('unanswered');
+      if (answers[qid + '_yn']) ry += `（${qField(q, 'yesnoLabel')}：${answers[qid + '_yn']}）`;
+      return ry;
+    case 'rating_distance':
+      const d0 = answers[qid + '_d0'];
+      const d1 = answers[qid + '_d1'];
+      const subLabels = qField(q, 'subLabels');
+      if (d0 === undefined && d1 === undefined) return t('unanswered');
+      return `${subLabels[0]}：${d0 !== undefined ? d0 + '/5' : t('unanswered')}，${subLabels[1]}：${d1 !== undefined ? d1 + '/5' : t('unanswered')}`;
+    case 'text':
+      return answers[qid] || t('unanswered');
+    default:
+      return t('unanswered');
+  }
+}
+
+// ============ EXPORT ============
+function getExportData() {
+  return {
+    meta: {
+      questionnaire: currentLang === 'zh' ? QUESTIONS.meta.title : QUESTIONS.meta.titleEn,
+      version: QUESTIONS.meta.version,
+      language: currentLang,
+      exportTime: new Date().toISOString(),
+      subject: document.getElementById('info-subject').value,
+      date: document.getElementById('info-date').value,
+      tester: document.getElementById('info-tester').value,
+      phone: document.getElementById('info-phone').value,
+      note: document.getElementById('info-note').value
+    },
+    answers: answers,
+    questions: QUESTIONS.sections.flatMap(s => s.questions.map(q => ({
+      id: q.id, category: q.category, categoryEn: q.categoryEn,
+      text: q.text, textEn: q.textEn, type: q.type
+    })))
+  };
+}
+
+function exportJSON() {
+  const data = getExportData();
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json;charset=utf-8'});
+  downloadBlob(blob, `TE102_${data.meta.subject}_${data.meta.date}.json`);
+  showToast(t('toastJson'));
+}
+
+function exportCSV() {
+  const data = getExportData();
+  const headers = [
+    currentLang === 'zh' ? '受试者编号' : 'Subject ID',
+    currentLang === 'zh' ? '测试日期' : 'Date',
+    currentLang === 'zh' ? '测试员' : 'Tester',
+    currentLang === 'zh' ? '联系电话' : 'Phone',
+    currentLang === 'zh' ? '备注' : 'Notes'
+  ];
+  const row = [data.meta.subject, data.meta.date, data.meta.tester, data.meta.phone, data.meta.note];
+
+  QUESTIONS.sections.forEach(s => s.questions.forEach(q => {
+    headers.push(`${q.id}_${q.category}`);
+    row.push(getAnswerCSV(q));
+  }));
+
+  const categories = {};
+  QUESTIONS.sections.forEach(s => s.questions.forEach(q => {
+    if (isQuestionHidden(q.id)) return; // 跳过条件隐藏的题目
+    if (!categories[q.category]) categories[q.category] = {sum:0, count:0};
+    const val = answers[q.id];
+    if (typeof val === 'number' && val >= 1 && val <= 5) {
+      categories[q.category].sum += val;
+      categories[q.category].count++;
+    }
+  }));
+  for (const [cat, d] of Object.entries(categories)) {
+    headers.push(`${t('avgScoreLabel')}_${cat}`);
+    row.push(d.count > 0 ? (d.sum / d.count).toFixed(2) : '');
+  }
+  headers.push('NPS');
+  row.push(answers['Q37'] !== undefined ? answers['Q37'] : '');
+
+  const csv = [headers, row].map(r => r.map(c => {
+    const s = String(c ?? '');
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }).join(',')).join('\n');
+
+  const blob = new Blob(['\uFEFF' + csv], {type: 'text/csv;charset=utf-8'});
+  downloadBlob(blob, `TE102_${data.meta.subject}_${data.meta.date}.csv`);
+  showToast(t('toastCsv'));
+}
+
+function getAnswerCSV(q) {
+  const qid = q.id;
+  // 条件隐藏的题目导出为 N/A
+  if (isQuestionHidden(qid)) return 'N/A';
+  switch(q.type) {
+    case 'radio': case 'yesno':
+      return answers[qid] || '';
+    case 'radio_text':
+      return (answers[qid] || '') + (answers[qid + '_text'] ? '|' + answers[qid + '_text'] : '');
+    case 'checkbox':
+      return answers[qid] ? answers[qid].join('|') : '';
+    case 'rating1_5': case 'rating0_10': case 'family_rating':
+      return answers[qid] !== undefined ? answers[qid] : '';
+    case 'rating_text':
+      return (answers[qid] !== undefined ? answers[qid] : '') + (answers[qid + '_text'] ? '|' + answers[qid + '_text'] : '');
+    case 'rating_yesno':
+      return (answers[qid] !== undefined ? answers[qid] : '') + (answers[qid + '_yn'] ? '|' + answers[qid + '_yn'] : '');
+    case 'rating_distance':
+      return (answers[qid + '_d0'] !== undefined ? answers[qid + '_d0'] : '') + '|' + (answers[qid + '_d1'] !== undefined ? answers[qid + '_d1'] : '');
+    case 'text':
+      return answers[qid] || '';
+    default:
+      return '';
+  }
+}
+
+function sendEmail() {
+  const data = getExportData();
+  const subject = encodeURIComponent(`${t('emailSubject')} - ${data.meta.subject} - ${data.meta.date}`);
+
+  let body = `${currentLang === 'zh' ? '受试者编号' : 'Subject ID'}：${data.meta.subject}\n${currentLang === 'zh' ? '测试日期' : 'Date'}：${data.meta.date}\n${currentLang === 'zh' ? '测试员' : 'Tester'}：${data.meta.tester || (currentLang === 'zh' ? '未填' : 'N/A')}\n\n`;
+  body += `${t('emailAvgTitle')}\n`;
+  const categories = {};
+  QUESTIONS.sections.forEach(s => s.questions.forEach(q => {
+    const cat = qCat(q);
+    if (!categories[cat]) categories[cat] = {sum:0, count:0};
+    const val = answers[q.id];
+    if (typeof val === 'number' && val >= 1 && val <= 5) {
+      categories[cat].sum += val;
+      categories[cat].count++;
+    }
+  }));
+  for (const [cat, d] of Object.entries(categories)) {
+    if (d.count > 0) body += `${cat}：${(d.sum/d.count).toFixed(2)}\n`;
+  }
+  body += `\n${t('npsLabel')}：${answers['Q37'] !== undefined ? answers['Q37'] + '/10' : t('unanswered')}\n`;
+  body += `\n${t('emailDetailTitle')}\n`;
+  let num = 0;
+  QUESTIONS.sections.forEach(s => s.questions.forEach(q => {
+    num++;
+    body += `\n${currentLang === 'zh' ? '第' : 'Q'}${num}[${q.id}] ${qText(q)}\n${currentLang === 'zh' ? '答' : 'A'}：${getAnswerDisplay(q)}\n`;
+  }));
+  body += `\n\n${t('emailFooter')}`;
+
+  const mailto = `mailto:?subject=${subject}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
+  showToast(t('toastEmail'));
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 100);
+}
+
+// ============ DRAFT ============
+function saveDraft() {
+  const draft = {
+    info: {
+      subject: document.getElementById('info-subject').value,
+      date: document.getElementById('info-date').value,
+      tester: document.getElementById('info-tester').value,
+      phone: document.getElementById('info-phone').value,
+      note: document.getElementById('info-note').value
+    },
+    answers: answers,
+    lang: currentLang,
+    savedAt: new Date().toISOString()
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+  showToast(t('toastSaved'));
+}
+
+let saveTimer = null;
+function autoSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveDraft, 2000);
+}
+
+function loadDraft() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+  try {
+    const draft = JSON.parse(raw);
+    if (draft.info) {
+      document.getElementById('info-subject').value = draft.info.subject || '';
+      document.getElementById('info-date').value = draft.info.date || '';
+      document.getElementById('info-tester').value = draft.info.tester || '';
+      document.getElementById('info-phone').value = draft.info.phone || '';
+      document.getElementById('info-note').value = draft.info.note || '';
+    }
+    if (draft.answers) {
+      answers = draft.answers;
+      restoreAnswers();
+    }
+    if (draft.savedAt) {
+      showToast(t('toastDraftRestored'));
+    }
+  } catch(e) { console.error('Draft load failed:', e); }
+}
+
+function restoreAnswers() {
+  document.querySelectorAll('.opt').forEach(opt => {
+    const qid = opt.dataset.q;
+    const val = opt.dataset.val;
+    if (answers[qid] !== undefined) {
+      if (opt.classList.contains('checkbox')) {
+        if (Array.isArray(answers[qid]) && answers[qid].includes(val)) {
+          opt.classList.add('selected');
+        }
+      } else if (answers[qid] === val) {
+        opt.classList.add('selected');
+      }
+    }
+  });
+
+  document.querySelectorAll('.rating-btn').forEach(btn => {
+    const qid = btn.dataset.q;
+    const val = parseInt(btn.dataset.val);
+    if (answers[qid] === val) btn.classList.add('selected');
+  });
+
+  document.querySelectorAll('input[data-q], textarea[data-q]').forEach(el => {
+    const qid = el.dataset.q;
+    if (answers[qid] !== undefined) el.value = answers[qid];
+  });
+}
+
+function resetAll() {
+  if (!confirm(t('confirmReset'))) return;
+  localStorage.removeItem(STORAGE_KEY);
+  answers = {};
+  document.querySelectorAll('.opt.selected').forEach(el => el.classList.remove('selected'));
+  document.querySelectorAll('.rating-btn.selected').forEach(el => el.classList.remove('selected'));
+  document.querySelectorAll('input[data-q], textarea[data-q]').forEach(el => el.value = '');
+  document.getElementById('info-subject').value = '';
+  document.getElementById('info-tester').value = '';
+  document.getElementById('info-phone').value = '';
+  document.getElementById('info-note').value = '';
+  setDefaultDate();
+  setDefaultSubject();
+  backToEdit();
+  updateConditionalVisibility();
+  updateProgress();
+  showToast(t('toastReset'));
+  window.scrollTo(0, 0);
+}
+
+// ============ TOAST ============
+let toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ============ START ============
+init();
+</script>
+</body>
+</html>
