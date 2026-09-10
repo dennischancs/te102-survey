@@ -80,7 +80,13 @@ def parse_answer(qid, raw, qdef):
             val = int(parts[0])
             result['score'] = val
             yn = parts[1] if len(parts) > 1 else ''
-            result['display'] = f'{val} / 5' + (f'（{yn}）' if yn else '')
+            yl = qdef.get('yesnoLabel', '')
+            if yn and yl:
+                result['display'] = f'{val} / 5（{yl}{yn}）'
+            elif yn:
+                result['display'] = f'{val} / 5（{yn}）'
+            else:
+                result['display'] = f'{val} / 5'
         except:
             result['display'] = raw
     elif qtype == 'rating_distance':
