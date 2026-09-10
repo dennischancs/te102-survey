@@ -205,8 +205,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","
           <input type="text" id="info-tester" placeholder="姓名">
         </div>
         <div class="info-item">
-          <label id="lblPhone">联系电话</label>
-          <input type="tel" id="info-phone" placeholder="选填">
+          <label id="lblPhone">联系电话/邮箱</label>
+          <input type="text" id="info-phone" placeholder="选填">
         </div>
         <div class="info-item full">
           <label id="lblNote">备注</label>
@@ -289,7 +289,7 @@ const I18N = {
     lblSubject: '受试者编号',
     lblDate: '测试日期 *',
     lblTester: '测试员',
-    lblPhone: '联系电话',
+    lblPhone: '联系电话/邮箱',
     lblNote: '备注',
     phSubject: '如：S001',
     phTester: '姓名',
@@ -347,7 +347,7 @@ const I18N = {
     lblSubject: 'Subject ID',
     lblDate: 'Test Date *',
     lblTester: 'Tester',
-    lblPhone: 'Phone',
+    lblPhone: 'Phone/Email',
     lblNote: 'Notes',
     phSubject: 'e.g., S001',
     phTester: 'Name',
@@ -965,7 +965,7 @@ function exportCSV() {
     currentLang === 'zh' ? '受试者编号' : 'Subject ID',
     currentLang === 'zh' ? '测试日期' : 'Date',
     currentLang === 'zh' ? '测试员' : 'Tester',
-    currentLang === 'zh' ? '联系电话' : 'Phone',
+    currentLang === 'zh' ? '联系电话/邮箱' : 'Phone/Email',
     currentLang === 'zh' ? '备注' : 'Notes'
   ];
   const row = [data.meta.subject, data.meta.date, data.meta.tester, data.meta.phone, data.meta.note];
@@ -1032,7 +1032,7 @@ function getAnswerCSV(q) {
 async function sendDingTalk() {
   try {
     const data = getExportData();
-    const headers = ['受试者编号', '测试日期', '测试员', '联系电话', '备注'];
+    const headers = ['受试者编号', '测试日期', '测试员', '联系电话/邮箱', '备注'];
     const row = [data.meta.subject, data.meta.date, data.meta.tester, data.meta.phone, data.meta.note];
     QUESTIONS.sections.forEach(s => s.questions.forEach(q => {
       headers.push(`${q.id}_${q.category}`);

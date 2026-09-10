@@ -280,13 +280,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","
         subject = data.get('受试者编号', f'#{idx+1}')
         date = data.get('测试日期', '')
         tester = data.get('测试员', '')
-        phone = data.get('联系电话', '')
+        phone = data.get('联系电话/邮箱', data.get('联系电话', ''))
         note = data.get('备注', '')
 
         parts.append(f'<div class="card"><div class="section-title"><span class="num">📋</span> {subject} {date}</div>')
         parts.append(f'<div class="meta-row"><span><b>来源：</b>{fname}</span></div>')
         parts.append(f'<div class="meta-row"><span><b>受试者编号：</b>{subject}</span><span><b>测试日期：</b>{date}</span></div>')
-        parts.append(f'<div class="meta-row"><span><b>测试员：</b>{tester}</span><span><b>联系电话：</b>{phone}</span></div>')
+        parts.append(f'<div class="meta-row"><span><b>测试员：</b>{tester}</span><span><b>联系电话/邮箱：</b>{phone}</span></div>')
         if note:
             parts.append(f'<div class="meta-row"><span><b>备注：</b>{note}</span></div>')
 
